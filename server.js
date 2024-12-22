@@ -22,7 +22,7 @@ mongoose
 
 // Define Mongoose Schema and Model
 const PassphraseSchema = new mongoose.Schema({
-    passphrase: { type: String, required: true, unique: true } // Ensure unique passphrases
+    passphrase: { type: String, required: true, unique: true } // Ensure uniqueness
 });
 const Passphrase = mongoose.model('Passphrase', PassphraseSchema);
 
@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 app.post('/submit', async (req, res) => {
     let { passphrase } = req.body;
 
-    // Normalize the passphrase (remove extra spaces and convert to lowercase)
+    // Normalize the passphrase (trim spaces and convert to lowercase for consistency)
     passphrase = passphrase.trim().toLowerCase();
 
     // Validate passphrase
